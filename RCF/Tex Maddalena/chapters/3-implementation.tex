@@ -1,0 +1,210 @@
+\section{QuantLibXL Rate Curve Framework}
+
+QuantLibXL is a compiled Add-in (i.e. specific type of application used to add features to Excel) which provides an Excel User Interface for the use of QuantLib functionality. QuantLib is a C++ free/open-source library for quantitative finance based on an object model.  In order to export QuantLib object-oriented functionality to Microsoft Excel, QuantLibXL uses ObjectHandler, a C++ library that implements a repository in which objects may be instantiated, queried, updated and destroyed . For more information please visit quantlib.org.
+
+This document explains how to have access to the framework and how to use it.
+
+It’s important to stress that Rate Curve Framework make use of Real Time Data. In order to have these data you need
+\begin{itemize}
+\item Thomson Reuters Eikon License
+\item Thomson Reuters Eikon platform and Thomson Reuters Eikon – Microsoft Excel installed on your workstation
+\end{itemize}
+
+Thomson Reuters Eikon – Microsoft Excel is an Excel Add-In that allows you to download real time data from Thomson Reuters Eikon platform to Microsoft Excel: in this way all market quotes that we need for calibration are available directly on Excel interface where they can interact with QuantLibXL functions.
+
+Note: Rate Curve Framework make use of QuantLibXL, but QuantLibXL is independent! One can use the Add-In without the framework: it’s sufficient to load in Excel the file compiled addin.
+
+
+\section{How to access the framework}
+
+\subsection{Access via XL-Launcher application}
+
+The easiest way to have access to the framework is by mean of XL-Launcher application that works as a front end to Excel and allows various Excel session configurations, such as Add-ins to be loaded and startup parameters to be passed to the Add-ins.
+
+You can install the XL-Launcher application by copying the address
+\\srv0001\ Risorse\WorkGroup\IMI_Workbooks\XL-Launcher\ Setup\setup.exe
+in the address bar of any explorer window. 
+
+Note: Usually the network share \\srv0001\Risorse is mapped and referred as Disk X; in this case the address is X:\WorkGroup\IMI_Workbooks\XL-Launcher\Setup\setup.exe
+\begin{itemize}
+\item If you cannot access this path, please contact  AM.Excel@bancaimi.com (specifying that you need the access to QuantLibXL Rate Curve Framework)
+\item If you have access but you get an error message about corrupt files, please try to repair the .Net Framework 2.0 running the following executable 
+\\srv0001\Risorse\WorkGroup\IMI_Workbooks\XL-Launcher\Setup\.Net\dotnetfx.exe 
+and select the repair option when the program asks for
+\item For any other problem with installation please contact AM.Excel@bancaimi.com
+\end{itemize}
+
+Once installed, you can follow the path Widows Start Menu All Programs Financial Engineering
+
+ 
+
+to start the application and have access to the XL-Launcher online support. Please read the “First Setup” documentation and the “Short Introduction” available on the online support. 
+ 
+The application looks like
+
+ 
+
+In the list of Preconfigured Environments (you can see only allowed environments) you have to select QuantLibXL Environment. This environment include a set of frameworks, and each framework has its Startup Parameters and its Components (Add-ins). When you click on the Launch Button, XL-Launcher starts a new instance of Excel, loads all the Add-ins (components) belonging to each framework and then passes to each loaded Framework its own list of startup parameters. 
+
+ 
+
+You have to select Rate Curve Framework and set the Startup Parameters as follows:
+\begin{itemize}
+\item Set Evaluation Date: by checking this box you can select the evaluation date from the drop down menu; if you do not check this box, the evaluation date is automatically set to today (default evaluation date)
+\item Default Currency: you can choose one of the currencies available in the dropdown list
+\item Bootstrap Yield Curves: you have to check this box in order to bootstrap the curves relevant for the Default Currency (if not checked, no curve will be bootstrapped)
+\item Open Main Checks: you have to check this box in order to open “MainChecks” workbook, that allow you to verify if real time feed and curves (corresponding to the chosen currency) are working
+\item Open Contributor: you do not have to check this box unless you need to open the spreadsheets that contribute market quotes to Murex
+\item Market Data: you have to choose “Live” from the dropdown list
+\end{itemize}
+
+Once you have set the parameters you can click on the Launch Button and wait until all spreadsheets and add-ins are loaded (it takes 2-3 minutes depending on selected currency).
+
+ 
+The loaded session looks like
+
+ 
+
+In Components Tab of XL-Launcher you can see which Add-Ins are now loaded in Excel:
+
+ 
+\begin{itemize}
+\item two .xll files, one for QuantLibXL and one for ObjectHandler
+\item one .xla file that manages the loading of all workbooks (stored in the network share \\srv0001\Risorse\WorkGroup\IMI_Workbooks\Production\QuantLibXL\)
+\end{itemize}
+
+We will come back at this point after explaining the second way to access the framework.
+
+\subsection{Access via “QuantLibXL” Folder}
+
+You can access the framework also by mean of a folder which includes a local copy of all required files. Usually this folder is named
+\begin{center}QuantLibXL-1.5.0-[date-time].zip\end{center}
+ where [date-time] is a string which contains the information about date and time of the folder release. 
+
+First you have to unzip the file: the unzipped folder looks like
+
+ 
+
+For each currency CCY, the information about Startup Parameters is inside session_file.CCY.xml file. 
+The parameters are usually set as follows:
+\begin{itemize}
+\item Set Evaluation Date: the evaluation date is automatically set to today (default evaluation date)
+\item Default Currency: the default currency is CCY
+\item Bootstrap Yield Curves: this flag is active
+\item Open Main Checks: this flag is active
+\item Open Contributor: this flag is not active
+\item Market Data: Live
+\end{itemize}
+
+In order to launch CCY Rate Curve Framework, you only have to double click session_file.CCY.bat file. Wait until the Excel session is loaded: you will see the "CCY_MainChecks.xlsx" workbook (figure below refers to EUR currency).
+
+ 
+
+
+
+
+
+
+
+
+
+\section{Main Checks}
+As an example, we now assume that you have launched HKD Rate Curve Framework (via XL-Launcher or via session_file.HKD.bat file). You now see the HKD_MainChecks.xlsx workbook.
+
+verify  
+
+First of all check the loading: you must see the “Ready” message in the Excel Status Bar.
+
+ 
+
+Then you have to check “Real Time Feed” and “Curves Calibration”.
+
+
+
+
+
+
+
+
+
+
+\subsection{Check Real Time Feed}
+
+In cells Q5-Q6-Q7 you must see the message “Updated at [current time]”.
+
+ 
+\begin{itemize}
+\item If you see a message like “Paused at …” please Resume Updates using Thomson Reuters Tab and check another time cells Q5-Q6-Q7: you must see the message “Updated at [current time]”
+\item If you see a message like “Offline at …” please go to Thomson Reuters Tab and check the Eikon LogIn: you must be Online. If you are Offline click the button to force the LogIn. Then check another time cells Q5-Q6-Q7: you must see the message “Updated at [current time]”.
+
+\end{itemize}
+
+
+ 
+
+
+ 
+At the end, you must have
+
+ 
+
+You can quickly check on Thomson Reuters Eikon platform that the values in cells M5-M6-M7 for instruments in cells K5-K6-K7 are correct.
+Check Curves Calibration
+
+Go to cell U2 (“Trigger”) and delete (or modify) the content.
+
+ 
+
+If everything works, you will see no error message in Info Column:
+
+ 
+
+If you still have error messages in Info Column try to Refresh All Workbook (Thomson Reuters Tab) and then cancel again the Trigger cell.
+
+ 
+
+
+
+
+You have to check also that
+
+\begin{itemize}
+\item For each curve, Curve Reference Date (column L) is equal to [curve’s spot date] (for example, for HKD spot date = today for all curves) and Curve Value (column M) is equal to 1.000000000
+\item For Ibor Index (HkdHibor3M for HKD), Index Reference Date must be [yesterday] if you launch the framework before fixings publication, otherwise [today]; Index Value must be the last published index fixing.
+\end{itemize}
+
+\subsection{Check Curves Calibration}
+
+Go to cell U2 (“Trigger”) and delete (or modify) the content.
+
+ 
+
+If everything works, you will see no error message in Info Column:
+
+ 
+
+If you still have error messages in Info Column try to Refresh All Workbook (Thomson Reuters Tab) and then cancel again the Trigger cell.
+
+ 
+
+
+
+
+You have to check also that
+
+\begin{itemize}
+\item For each curve, Curve Reference Date (column L) is equal to [curve’s spot date] (for example, for HKD spot date = today for all curves) and Curve Value (column M) is equal to 1.000000000
+\item For Ibor Index (HkdHibor3M for HKD), Index Reference Date must be [yesterday] if you launch the framework before fixings publication, otherwise [today]; Index Value must be the last published index fixing.
+\end{itemize}
+
+\cite{ametranomazzocchi}
+\cite{mazzocchi}
+\cite{henrard}
+\cite{opengamma}
+
+\section{Market Quotes}
+\section{Synthetic Quotes}
+\section{Jump Quotes}
+\section{Bootstrapping}
+\section{Contribution}
+\section{Monitoring}

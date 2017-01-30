@@ -1,0 +1,79 @@
+\documentclass[11pt,twoside]{report}
+
+
+\title{Rate Curves Framework}
+\author{Banca IMI - Quantitative Structuring}
+\date{November 2015}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[a4paper]{geometry}%bindingoffset=6mm
+
+%header-footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[RO,LE]{Rate Curves Framework}
+%\fancyfoot{}
+%\fancyfoot[LE,RO]{\thepage}
+%\fancyfoot[CO,RE]{Banca IMI - Quantitative Structuring}
+
+%justify
+\usepackage{ragged2e}
+\justifying
+
+%for theorems: \proof and \endproof
+\usepackage{amsthm}
+
+\usepackage{amssymb} 
+\usepackage{eurosym}
+\usepackage{empheq}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{subcaption}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage{pifont}
+
+
+%appendix
+\usepackage[titletoc,toc,title]{appendix}
+%images
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{subfig}
+
+\graphicspath{ {images/} }
+
+
+%bibliography
+\usepackage[backend=biber]{biblatex}
+\addbibresource{references.bib}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Introduction}\label{chap:1}
+\input{chapters/1-introduction}
+
+\chapter{Rate Curves Calibration: Methodology}\label{chap:2}
+\input{chapters/2-methodology}
+
+\chapter{EUR Rate Curve Framework}\label{chap:4}
+\input{chapters/4-EURframework}
+
+%\chapter{Rate Curves Framework Implementation}\label{chap:3}
+%\input{chapters/3-implementation}
+
+%\appendix
+%\capther{Appendix}
+%\input{chapters/}
+
+\printbibliography
+
+\end{document}

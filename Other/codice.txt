@@ -1,0 +1,22 @@
+// classes example
+
+#include <iostream> // tells to the compiler that we want to use the iostream library; useful if we want to print outputs
+
+class Rectangle {
+    int base, altezza; // define 2 integer private members for class Rectangle
+  public:
+    void set_values(int x, int y) {
+		  base = x;
+          altezza = y;
+		  }
+    int area() {return base*altezza;} // Initialize and define a public member function for class Rectangle
+};
+
+int main () {
+    Rectangle rect;
+    rect.set_values (3,4); // recall set_values function with sintax: "objectname.membername"
+	rectb.set.values (5,6); // a class it's like a tybe and we can declare multiple object of it
+    std::cout << "l'area è pari a: " << rect.area(); // print output area
+	std::cout << "l'area è pari a: " << rectb.area(); // print output area
+	return 0;
+}

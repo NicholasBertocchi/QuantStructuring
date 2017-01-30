@@ -1,0 +1,121 @@
+Option Explicit
+
+
+Sub ConvexityCalibrator()
+'Root finding procedure which find the best couple of values: sigma-mean_reversion in order to
+'minimize calibration error
+
+
+Dim SigmaStart As Range: Set SigmaStart = ThisWorkbook.Worksheets("FuturesHWCOnvAdj").Range("Sigma")
+Dim MeanStart As Range: Set MeanStart = ThisWorkbook.Worksheets("FuturesHWCOnvAdj").Range("Mean")
+Dim Error As Range: Set Error = ThisWorkbook.Worksheets("FuturesHWCOnvAdj").Range("Error")
+Dim Bump As Range: Set Bump = ThisWorkbook.Worksheets("FuturesHWCOnvAdj").Range("Bump")
+Dim Iteration_Num As Range: Set Iteration_Num = ThisWorkbook.Worksheets("FuturesHWCOnvAdj").Range("Iteration_Num")
+Dim Bump2 As Range: Set Bump2 = ThisWorkbook.Worksheets("FuturesHWCOnvAdj").Range("Bump2")
+Dim Iteration_Num2 As Range: Set Iteration_Num2 = ThisWorkbook.Worksheets("FuturesHWCOnvAdj").Range("Iteration_Num2")
+Dim Flag As Range: Set Flag = ThisWorkbook.Worksheets("FuturesHWCOnvAdj").Range("Flag")
+Dim i As Double
+Dim j As Double
+Dim Error_Vector() As Double
+Dim Sigma_Vector() As Double
+Dim Mean_Vector() As Double
+Dim Min As Double: Min = 10000
+Dim SigmaEnd As Double: SigmaEnd = 0
+Dim MeanEnd As Double: MeanEnd = 0
+Dim Mean As Double: Mean = MeanStart
+
+
+ReDim Error_Vector(Iteration_Num)
+ReDim Sigma_Vector(Iteration_Num)
+ReDim Mean_Vector(Iteration_Num2)
+
+
+If Flag = True Then 'bidimensional calibration: calibrates both sigma and mean_reversion
+
+
+      For i = 1 To Iteration_Num
+      
+      
+      MeanStart = Mean
+      SigmaStart = SigmaStart + Bump
+      Sigma_Vector(i) = SigmaStart
+      Error_Vector(i) = Error
+
+
+        If Error_Vector(i) < Min Then
+        Min = Error_Vector(i)
+        SigmaEnd = Sigma_Vector(i)
+        MeanEnd = MeanStart
+        End If
+  
+  
+            For j = 1 To Iteration_Num2
+     
+     
+            MeanStart = MeanStart + Bump2
+            Mean_Vector(j) = MeanStart
+
+
+              If Error_Vector(i) < Min Then
+              Min = Error_Vector(i)
+              SigmaEnd = Sigma_Vector(i)
+              MeanEnd = Mean_Vector(j)
+              End If
+     
+     
+            j = j + 1
+     
+     
+            Next
+
+
+    i = i + 1
+
+
+    Next
+
+
+Error = Min
+SigmaStart = SigmaEnd
+MeanStart = MeanEnd
+MsgBox ("Calibration completed successfully")
+
+
+ElseIf Flag = False Then 'monodimensional calibration: calibrates just sigma leaving mean_reversion fixed to a specific value
+
+
+     For i = 1 To Iteration_Num
+
+
+     SigmaStart = SigmaStart + Bump
+     Sigma_Vector(i) = SigmaStart
+     Error_Vector(i) = Error
+
+
+       If Error_Vector(i) < Min Then
+       Min = Error_Vector(i)
+       SigmaEnd = Sigma_Vector(i)
+       End If
+
+
+     i = i + 1
+
+
+     Next
+
+
+Error = Min
+SigmaStart = SigmaEnd
+MsgBox ("Calibration completed successfully")
+
+
+Else
+
+
+MsgBox ("Error: Flag range must be TRUE or FALSE")
+
+
+End If
+
+
+End Sub

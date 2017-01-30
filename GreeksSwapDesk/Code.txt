@@ -1,0 +1,43 @@
+=IF(OFFSET($V3,0,-1)=3, 4, IF($B3=$L$5,1, IF($D3=$L$5, 2, IF(AND($L$5<$B3, $B3<$L$6), 3, IF(AND($L$5<$D3, $D3<$L$6),4,0)))))
+
+
+
+Option Explicit
+
+Function OisSensitivity(OisBuckets As Range, StartDate As Date, EndDate As Date)
+
+Dim CurveObject As Range
+Set CurveObject = ThisWorkbook.Names("CurveObject").RefersToRange
+Dim EvaluationDate As Range
+Set EvaluationDate = ThisWorkbook.Names("EvaluationDate").RefersToRange
+Set OisBuckets = ThisWorkbook.Names("OisBuckets").RefersToRange
+
+Dim Pillar As Date
+Dim TauAB As Double
+Dim InitialDisc As Double
+Dim FinalDisc As Double
+Dim EvaluationDate As Date
+Dim TauA As Double
+Dim TauB As Double
+Dim j As Integer
+
+For Each Pillar In OisBuckets
+
+    If StartDate = Pillar Or Pillar < StartDate < (Pillar + 1) Then
+    
+    TauAB = Application.Run("qlDayCounterYearFraction", "Act/360", "StartDate", "EndDate")
+    InitialDisc = Application.Run("qlYieldTSDiscount", "CurveObject", "StartDate", "Actual/365")
+    FinalDisc = Application.Run("qlYieldTSDiscount", "CurveObject", "EndDate", "Actual/365")
+    TauA = Application.Run("qlDayCounterYearFraction", "Act/360", "EvaluationDate", "StartDate")
+    TauPrev = Application.Run("qlDayCounterYearFraction", "Act/360", "EvaluationDate", "Pillar")
+    TauPost = Application.Run("qlDayCounterYearFraction", "Act/360", "EvaluationDate", "(Pillar+1)")
+    
+    OisSensitivity = (1 / TauAB) * (-TauA) * (InitialDisc / FinalDisc) * ((TauPost - TauA) / (TauPost - TauPrev))
+    
+    End If
+    
+Pillar = Pillar + 1
+    
+    
+
+End Function
